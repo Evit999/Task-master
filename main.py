@@ -1,21 +1,21 @@
-Tasks = []
+tasks = []
 
 def add_task(task):
-    Tasks.append(task)
-    print(f"a tarefa '{task}' foi adicionada.")
+    tasks.append(task)
+    print(f"A tarefa '{task}' foi adicionada.")
 
 def list_tasks():
-    if not Tasks:
+    if not tasks:
         print("Nenhuma tarefa encontrada.")
     else:
         print("Tarefas:")
-        for index, task in enumerate(Tasks, start=1):
+        for index, task in enumerate(tasks, start=1):
             print(f"{index}. {task}")
 
-def remover_task(index):
-    if 0 < index <= len(Tasks):
-        removed_task = Tasks.pop(index - 1)
-        print(f"a tarefa '{removed_task}' foi removida.")
+def remove_task(index):
+    if 0 < index <= len(tasks):
+        removed_task = tasks.pop(index - 1)
+        print(f"A tarefa '{removed_task}' foi removida.")
     else:
         print("Índice inválido.")
 
@@ -35,12 +35,16 @@ def main():
         elif choice == '2':
             list_tasks()
         elif choice == '3':
-            index = int(input("Digite o número da tarefa a ser removida: "))
-            remover_task(index)
+            try:
+                index = int(input("Digite o número da tarefa a ser removida: "))
+                remove_task(index)
+            except ValueError:
+                print("Entrada inválida. Digite um número.")
         elif choice == '4':
             print("Saindo...")
             break
         else:
             print("Opção inválida. Tente novamente.")
 
-if __name__ == "__main__":    main()
+if __name__ == "__main__":
+    main()
