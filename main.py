@@ -1,50 +1,52 @@
+import tkinter as tk
+from tkinter import messagebox
+
 tasks = []
 
-def add_task(task):
-    tasks.append(task)
-    print(f"A tarefa '{task}' foi adicionada.")
+##Funções
+def add_task():
+    task = entry_task.get().strip()
 
-def list_tasks():
-    if not tasks:
-        print("Nenhuma tarefa encontrada.")
+    if task:
+        tasks.append(task)
+        update_list()
+        entry_task.delete(0, tk.END)
     else:
-        print("Tarefas:")
-        for index, task in enumerate(tasks, start=1):
-            print(f"{index}. {task}")
+        messagebox.showwarning("Aviso", "Digite uma tarefa.")
 
-def remove_task(index):
-    if 0 < index <= len(tasks):
-        removed_task = tasks.pop(index - 1)
-        print(f"A tarefa '{removed_task}' foi removida.")
-    else:
-        print("Índice inválido.")
+def remove_task():
+    try:
+        index = listbox.curselection()[0]
+        tasks.pop(index)
+        update_list()
+    except IndexError:
+        messagebox.showwarning("Aviso", "Selecione uma tarefa.")
 
-def main():
-    while True:
-        print("\nMenu:")
-        print("1. Adicionar tarefa")
-        print("2. Listar tarefas")
-        print("3. Remover tarefa")
-        print("4. Sair")
+def update_list():
+    listbox.delete(0, tk.END)
+    for task in tasks:
+        listbox.insert(tk.END, task)
 
-        choice = input("Escolha uma opção: ")
+#Janela
+window = tk.Tk()
+window.title("Lista de Tarefas")
+window.geometry("400x400")
 
-        if choice == '1':
-            task = input("Digite a tarefa: ")
-            add_task(task)
-        elif choice == '2':
-            list_tasks()
-        elif choice == '3':
-            try:
-                index = int(input("Digite o número da tarefa a ser removida: "))
-                remove_task(index)
-            except ValueError:
-                print("Entrada inválida. Digite um número.")
-        elif choice == '4':
-            print("Saindo...")
-            break
-        else:
-            print("Opção inválida. Tente novamente.")
+#Campo de entrada
+entry_task = tk.Entry(window, width=35)
+entry_task.pack(pady=10)
 
-if __name__ == "__main__":
-    main()
+##Botão adicionar
+btn_add = tk.Button(window, text="Adicionar", command=add_task)
+btn_add.pack()
+
+#Lista de tarefas
+listbox = tk.Listbox(window, width=45, height=15)
+listbox.pack(pady=10)
+
+##Botão remover
+btn_remove = tk.Button(window, text="Remover Selecionada", command=remove_task)
+btn_remove.pack()
+
+##Executar
+window.mainloop()
